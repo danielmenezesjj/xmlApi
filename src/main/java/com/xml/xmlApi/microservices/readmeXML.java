@@ -2,6 +2,8 @@ package com.xml.xmlApi.microservices;
 
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.xml.xmlApi.Infrastructure.Repository.EmitRepository;
+import com.xml.xmlApi.domain.Emitente.Emit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,12 @@ import java.util.Map;
 @RestController
 public class readmeXML {
 
+    private final EmitRepository emitRepository;
+
+    // Injeção de dependência do repositório por meio do construtor
+    public readmeXML(EmitRepository emitRepository) {
+        this.emitRepository = emitRepository;
+    }
 
     @PostMapping("/teste")
     public ResponseEntity<Map<String, Object>> receberXML(@RequestParam("file") MultipartFile file) {
@@ -28,20 +36,17 @@ public class readmeXML {
             Map<String, Object> ide = (Map<String, Object>) xmlMap.get("NFe");
             if (ide != null) {
                 ide = (Map<String, Object>) ide.get("infNFe");
-                if (ide != null) {
-                    ide = (Map<String, Object>) ide.get("emit");
-                    if (ide != null) {
-                        // Aqui você pode usar 'ide' para acessar os valores específicos dentro de 'ide'
-                        String cUF = (String) ide.get("cUF");
-                        String cNF = (String) ide.get("cNF");
-                        // e assim por diante...
-                        System.out.println(ide);
-                        return new ResponseEntity<>(ide, HttpStatus.OK);
-                    }
-                }
-            }
+                ide = (Map<String, Object>) ide.get("emit");
 
-            // Se chegou aqui, a estrutura não foi encontrada
+                // Converta o Map para uma instância de Emit
+                Emit emit = convertMapToEmit(ide);
+
+                // Salvar a instância no repositório
+                emitRepository.save(emit);
+
+                // Retorna o mapa salvo como resposta
+                return new ResponseEntity<>(ide, HttpStatus.OK);
+            }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,4 +54,16 @@ public class readmeXML {
         }
     }
 
+    private Emit convertMapToEmit(Map<String, Object> ide) {
+        // Implemente a lógica para converter o Map em uma instância de Emit
+        // Exemplo:
+        Emit emit = new Emit();
+        emit.setCNPJ((String) ide.get("CNPJ"));
+        emit.setXNome((String) ide.get("xNome"));
+        emit.setIE((String) ide.get("IE"));
+        emit.setCRT((String) ide.get("CRT"));
+
+        // Configurar outros campos...
+        return emit;
+    }
 }
