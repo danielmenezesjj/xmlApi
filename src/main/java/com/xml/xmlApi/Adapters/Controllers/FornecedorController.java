@@ -4,6 +4,7 @@ package com.xml.xmlApi.Adapters.Controllers;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.Adapters.exceptions.EntityAlreadyExistException;
+import com.xml.xmlApi.Adapters.exceptions.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
 import com.xml.xmlApi.core.businessRule.FornecedorBusiness;
 import com.xml.xmlApi.core.businessRule.FornecedorEnderecoBusiness;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,6 +77,14 @@ public class FornecedorController {
     @GetMapping("/{cnpj}")
     public ResponseEntity getOneFornecedor(@PathVariable String cnpj) throws EntityAlreadyExistException {
         return ResponseEntity.ok(fornecedorBusiness.getOne(cnpj));
+    }
+
+
+    @PutMapping("/{cnpj}")
+    @Transactional
+    public ResponseEntity putFornecedor(@PathVariable String cnpj, @RequestBody FornecedorDTO data) throws EntityNotExistException{
+        fornecedorBusiness.updateFornecedor(cnpj, data);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -1,6 +1,8 @@
 package com.xml.xmlApi.core.businessRule;
 
+import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.Adapters.exceptions.EntityAlreadyExistException;
+import com.xml.xmlApi.Adapters.exceptions.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
 import com.xml.xmlApi.core.domain.Fornecedor.EnderFornecedor;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
@@ -61,6 +63,17 @@ public class FornecedorBusiness {
             throw new EntityAlreadyExistException(cnpj);
         }else{
             return optionalFornecedor.get();
+        }
+    }
+
+    public void updateFornecedor(String cnpj, FornecedorDTO data) throws EntityNotExistException {
+        Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
+        if(optionalFornecedor.isPresent()){
+            Fornecedor fornecedor = optionalFornecedor.get();
+            fornecedor.update(data);
+            fornecedorRepository.save(fornecedor);
+        }else{
+            throw new EntityNotExistException(cnpj);
         }
     }
 

@@ -31,4 +31,22 @@ public class Fornecedor {
         this.enderFornecedor = data.enderFornecedor();
     }
 
+    public void update(FornecedorDTO data) {
+        if(data.CNPJ() != null){
+            this.cnpj = data.CNPJ();
+        }
+        if(data.xNome() != null){
+            this.xNome = data.xNome();
+        }
+        if(data.IE() != null){
+            this.IE = data.IE();
+        }
+        if(data.CRT() != null){
+            this.CRT = data.CRT();
+        }
+        if(data.enderFornecedor() != null){
+            this.enderFornecedor = data.enderFornecedor();
+        }
+
+    }
 }
