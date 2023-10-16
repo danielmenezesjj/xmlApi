@@ -75,7 +75,7 @@ public class FornecedorController {
     }
 
     @GetMapping("/{cnpj}")
-    public ResponseEntity getOneFornecedor(@PathVariable String cnpj) throws EntityAlreadyExistException {
+    public ResponseEntity getOneFornecedor(@PathVariable String cnpj) throws EntityNotExistException {
         return ResponseEntity.ok(fornecedorBusiness.getOne(cnpj));
     }
 

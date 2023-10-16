@@ -9,7 +9,9 @@ import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -57,23 +59,28 @@ public class FornecedorBusiness {
         return fornecedorRepository.findAll(pageable);
     }
 
-    public Fornecedor getOne(String cnpj) throws EntityAlreadyExistException {
+    public Fornecedor getOne(String cnpj) throws EntityNotExistException {
         Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
         if(!optionalFornecedor.isPresent()){
-            throw new EntityAlreadyExistException(cnpj);
+            throw new EntityNotExistException(cnpj);
         }else{
             return optionalFornecedor.get();
         }
     }
 
-    public void updateFornecedor(String cnpj, FornecedorDTO data) throws EntityNotExistException {
-        Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
-        if(optionalFornecedor.isPresent()){
-            Fornecedor fornecedor = optionalFornecedor.get();
-            fornecedor.update(data);
-            fornecedorRepository.save(fornecedor);
-        }else{
-            throw new EntityNotExistException(cnpj);
+    public void updateFornecedor(String cnpj, FornecedorDTO data) {
+        try {
+            Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
+            if (optionalFornecedor.isPresent()) {
+                Fornecedor fornecedor = optionalFornecedor.get();
+                fornecedor.update(data);
+                fornecedorRepository.save(fornecedor);
+            } else {
+                throw new EntityNotExistException(cnpj);
+            }
+        } catch (EntityNotExistException ex) {
+            String mensagem = ex.getMessage();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, mensagem);
         }
     }
 
