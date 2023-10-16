@@ -1,7 +1,7 @@
 package com.xml.xmlApi.Adapters.Dtos;
 
 public record EnderEmitDTO(
-         String xLgr,
+         String xlgr,
          String  nro,
          String xBairro,
          String cMun,
@@ -10,5 +10,7 @@ public record EnderEmitDTO(
          String CEP,
          String cPais,
          String xPais,
-         String fone) {
+         String fone,
+         String xCpl
+) {
 }
