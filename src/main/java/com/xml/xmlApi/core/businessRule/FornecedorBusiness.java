@@ -84,6 +84,16 @@ public class FornecedorBusiness {
         }
     }
 
+    public void deleteFornecedor(String cnpj) throws EntityNotExistException{
+        Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
+        if(optionalFornecedor.isPresent()){
+            Fornecedor fornecedor = optionalFornecedor.get();
+            fornecedorRepository.delete(fornecedor);
+        }else{
+            throw new EntityNotExistException(cnpj);
+        }
+    }
+
 
 
     public Fornecedor convertMapToFornecedor(Map<String, Object> ide) {

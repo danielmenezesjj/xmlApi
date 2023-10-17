@@ -86,6 +86,12 @@ public class FornecedorController {
         fornecedorBusiness.updateFornecedor(cnpj, data);
         return ResponseEntity.ok().build();
     }
+    @DeleteMapping("/{cnpj}")
+    public ResponseEntity deleteFornecedor(@PathVariable String cnpj) throws EntityNotExistException {
+        fornecedorBusiness.deleteFornecedor(cnpj);
+        return ResponseEntity.noContent().build();
+
+    }
 
 
 }

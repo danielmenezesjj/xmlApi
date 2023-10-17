@@ -9,7 +9,7 @@ public class EntityNotExistException extends Exception {
     private String message;
 
     public EntityNotExistException(String cnpj) {
-        this.message = "Entidade com CNPJ '" + cnpj + "' não encontrada.";
+        this.message = "Entidade com CNPJ " + cnpj + " não encontrada.";
     }
 
     @Override
