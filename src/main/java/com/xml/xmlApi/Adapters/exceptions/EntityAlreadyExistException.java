@@ -6,7 +6,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.CONFLICT)
 public class EntityAlreadyExistException extends Exception {
-    public EntityAlreadyExistException(String cnpj){
 
+    private String message;
+    public EntityAlreadyExistException(String cnpj){
+        this.message = "Entidade com CNPJ " + cnpj + " já cadastrada.";
+
+    }
+    @Override
+    public String getMessage() {
+        return message;
     }
 }
