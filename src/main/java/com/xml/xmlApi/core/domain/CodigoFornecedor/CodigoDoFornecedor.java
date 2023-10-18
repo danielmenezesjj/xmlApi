@@ -25,7 +25,9 @@ public class CodigoDoFornecedor {
         private String materialfornecedor;
 
         @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-        @JsonBackReference
+
+        @JsonManagedReference
+
         @JoinColumn(name = "fornecedor_id")
         private Fornecedor fornecedor;
 

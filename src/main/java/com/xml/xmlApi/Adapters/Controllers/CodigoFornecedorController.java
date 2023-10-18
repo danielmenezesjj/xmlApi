@@ -53,6 +53,10 @@ public class CodigoFornecedorController {
         return ResponseEntity.ok(codigoFornecedorBusiness.getOne(cdfornecedor));
     }
 
+    @GetMapping("/materiais/{cdempresa}")
+    public ResponseEntity getAllCdMaterias(@PathVariable Integer cdempresa) throws EntityNotExistException {
+        return ResponseEntity.ok(codigoFornecedorBusiness.getAllCodigosEmpresa(cdempresa));
+    }
 
 //    @PutMapping("/{cnpj}")
 //    @Transactional
@@ -60,12 +64,12 @@ public class CodigoFornecedorController {
 //        fornecedorBusiness.updateFornecedor(cnpj, data);
 //        return ResponseEntity.ok().build();
 //    }
-//    @DeleteMapping("/{cnpj}")
-//    public ResponseEntity deleteFornecedor(@PathVariable String cnpj) throws EntityNotExistException {
-//        fornecedorBusiness.deleteFornecedor(cnpj);
-//        return ResponseEntity.noContent().build();
-//
-//    }
+    @DeleteMapping("/{cdfornecedor}")
+    public ResponseEntity deleteCodigoFornecedor(@PathVariable String cdfornecedor) throws EntityNotExistException {
+        codigoFornecedorBusiness.deleteCodigoFornecedor(cdfornecedor);
+        return ResponseEntity.noContent().build();
+
+    }
 
 
 }

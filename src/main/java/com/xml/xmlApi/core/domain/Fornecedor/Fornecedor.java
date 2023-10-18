@@ -1,6 +1,7 @@
 package com.xml.xmlApi.core.domain.Fornecedor;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.core.domain.CodigoFornecedor.CodigoDoFornecedor;
@@ -29,7 +30,7 @@ public class Fornecedor {
     private EnderFornecedor enderFornecedor;
 
     @OneToMany(mappedBy = "fornecedor", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonBackReference
     private List<CodigoDoFornecedor> codigos;
 
     public Fornecedor(FornecedorDTO data){

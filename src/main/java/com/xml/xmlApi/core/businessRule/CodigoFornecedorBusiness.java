@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -52,6 +53,16 @@ public class CodigoFornecedorBusiness {
         }
     }
 
+    public List<CodigoDoFornecedor> getAllCodigosEmpresa(Integer cdEmpresa) throws EntityNotExistException {
+        List<CodigoDoFornecedor> codigoDoFornecedorList = codigoFornecedorRepository.findByCdEmpresa(cdEmpresa);
+        if (codigoDoFornecedorList.isEmpty()) {
+            throw new EntityNotExistException("Códigos não encontrados para a empresa com o ID: " + cdEmpresa);
+        } else {
+            return codigoDoFornecedorList;
+        }
+    }
+
+
 //    public void updateCodigo(String cnpj, FornecedorDTO data) {
 //        try {
 //            Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
@@ -68,15 +79,15 @@ public class CodigoFornecedorBusiness {
 //        }
 //    }
 //
-//    public void deleteFornecedor(String cnpj) throws EntityNotExistException{
-//        Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
-//        if(optionalFornecedor.isPresent()){
-//            Fornecedor fornecedor = optionalFornecedor.get();
-//            fornecedorRepository.delete(fornecedor);
-//        }else{
-//            throw new EntityNotExistException(cnpj);
-//        }
-//    }
+    public void deleteCodigoFornecedor(String cdfornecedor) throws EntityNotExistException{
+        Optional<CodigoDoFornecedor> optionalCodigoDoFornecedor = codigoFornecedorRepository.findBycdfornecedor(cdfornecedor);
+        if(optionalCodigoDoFornecedor.isPresent()){
+            CodigoDoFornecedor codigoDoFornecedor = optionalCodigoDoFornecedor.get();
+            codigoFornecedorRepository.delete(codigoDoFornecedor);
+        }else{
+            throw new EntityNotExistException(cdfornecedor);
+        }
+    }
 
 
 
