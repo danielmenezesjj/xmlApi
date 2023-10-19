@@ -1,27 +1,19 @@
 package com.xml.xmlApi.Adapters.Controllers;
 
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.xml.xmlApi.Adapters.Dtos.CodigoFornecedorDTO;
-import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
-import com.xml.xmlApi.Adapters.exceptions.EntityAlreadyExistException;
-import com.xml.xmlApi.Adapters.exceptions.EntityNotExistException;
-import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityAlreadyExistExceptionCdFornecedor;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityNotExistExceptionCdFornecedor;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.core.businessRule.CodigoFornecedorBusiness;
-import com.xml.xmlApi.core.businessRule.FornecedorBusiness;
-import com.xml.xmlApi.core.businessRule.FornecedorEnderecoBusiness;
 import com.xml.xmlApi.core.domain.CodigoFornecedor.CodigoDoFornecedor;
-import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.Map;
 
 
 @RestController
@@ -35,7 +27,7 @@ public class CodigoFornecedorController {
 
 
     @PostMapping
-    public ResponseEntity postCodigoFornecedor (@RequestBody CodigoFornecedorDTO data) throws EntityAlreadyExistException {
+    public ResponseEntity postCodigoFornecedor (@RequestBody CodigoFornecedorDTO data) throws EntityAlreadyExistExceptionCdFornecedor {
             CodigoDoFornecedor codigoDoFornecedor = new CodigoDoFornecedor(data);
         // Salve o CodigoDoFornecedor
             codigoFornecedorBusiness.postCodigoFornecedor(codigoDoFornecedor, data.fornecedor_id());
@@ -49,23 +41,23 @@ public class CodigoFornecedorController {
     }
 
     @GetMapping("/{cdfornecedor}")
-    public ResponseEntity getOnecdFornecedor(@PathVariable String cdfornecedor) throws EntityNotExistException {
+    public ResponseEntity getOnecdFornecedor(@PathVariable String cdfornecedor) throws EntityNotExistExceptionCdFornecedor {
         return ResponseEntity.ok(codigoFornecedorBusiness.getOne(cdfornecedor));
     }
 
     @GetMapping("/materiais/{cdempresa}")
-    public ResponseEntity getAllCdMaterias(@PathVariable Integer cdempresa) throws EntityNotExistException {
+    public ResponseEntity getAllCdMaterias(@PathVariable Integer cdempresa) throws EntityNotExistExceptionCdFornecedor {
         return ResponseEntity.ok(codigoFornecedorBusiness.getAllCodigosEmpresa(cdempresa));
     }
 
-//    @PutMapping("/{cnpj}")
-//    @Transactional
-//    public ResponseEntity putFornecedor(@PathVariable String cnpj, @RequestBody FornecedorDTO data) throws EntityNotExistException{
-//        fornecedorBusiness.updateFornecedor(cnpj, data);
-//        return ResponseEntity.ok().build();
-//    }
+    @PutMapping("/{cdempresa}")
+    @Transactional
+    public ResponseEntity putFornecedor(@PathVariable String cdFornecedor, @RequestBody CodigoFornecedorDTO data) throws EntityNotExistException{
+        codigoFornecedorBusiness.updateCodigoFornecedor(cdFornecedor, data);
+        return ResponseEntity.ok().build();
+    }
     @DeleteMapping("/{cdfornecedor}")
-    public ResponseEntity deleteCodigoFornecedor(@PathVariable String cdfornecedor) throws EntityNotExistException {
+    public ResponseEntity deleteCodigoFornecedor(@PathVariable String cdfornecedor) throws EntityNotExistExceptionCdFornecedor {
         codigoFornecedorBusiness.deleteCodigoFornecedor(cdfornecedor);
         return ResponseEntity.noContent().build();
 

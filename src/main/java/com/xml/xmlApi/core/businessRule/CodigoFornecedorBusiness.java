@@ -1,12 +1,13 @@
 package com.xml.xmlApi.core.businessRule;
 
-import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
-import com.xml.xmlApi.Adapters.exceptions.EntityAlreadyExistException;
-import com.xml.xmlApi.Adapters.exceptions.EntityNotExistException;
+import com.xml.xmlApi.Adapters.Dtos.CodigoFornecedorDTO;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityAlreadyExistExceptionCdFornecedor;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityNotExistExceptionCdFornecedor;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.CodigoFornecedorRepository;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
 import com.xml.xmlApi.core.domain.CodigoFornecedor.CodigoDoFornecedor;
-import com.xml.xmlApi.core.domain.Fornecedor.EnderFornecedor;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -34,7 +34,7 @@ public class CodigoFornecedorBusiness {
 
 
 
-    public CodigoDoFornecedor postCodigoFornecedor(CodigoDoFornecedor codigoDoFornecedor, Integer id) throws EntityAlreadyExistException {
+    public CodigoDoFornecedor postCodigoFornecedor(CodigoDoFornecedor codigoDoFornecedor, Integer id) throws EntityAlreadyExistExceptionCdFornecedor {
         Optional<Fornecedor> fornecedor = fornecedorRepository.findById(id);
         codigoDoFornecedor.setFornecedor(fornecedor.get());
       return codigoFornecedorRepository.save(codigoDoFornecedor);
@@ -44,48 +44,48 @@ public class CodigoFornecedorBusiness {
         return codigoFornecedorRepository.findAll(pageable);
     }
 
-    public CodigoDoFornecedor getOne(String cdfornecedor) throws EntityNotExistException {
+    public CodigoDoFornecedor getOne(String cdfornecedor) throws EntityNotExistExceptionCdFornecedor {
         Optional<CodigoDoFornecedor> optionalCodigoDoFornecedor = codigoFornecedorRepository.findBycdfornecedor(cdfornecedor);
         if(!optionalCodigoDoFornecedor.isPresent()){
-            throw new EntityNotExistException(cdfornecedor);
+            throw new EntityNotExistExceptionCdFornecedor(cdfornecedor);
         }else{
             return optionalCodigoDoFornecedor.get();
         }
     }
 
-    public List<CodigoDoFornecedor> getAllCodigosEmpresa(Integer cdEmpresa) throws EntityNotExistException {
+    public List<CodigoDoFornecedor> getAllCodigosEmpresa(Integer cdEmpresa) throws EntityNotExistExceptionCdFornecedor {
         List<CodigoDoFornecedor> codigoDoFornecedorList = codigoFornecedorRepository.findByCdEmpresa(cdEmpresa);
         if (codigoDoFornecedorList.isEmpty()) {
-            throw new EntityNotExistException("Códigos não encontrados para a empresa com o ID: " + cdEmpresa);
+            throw new EntityNotExistExceptionCdFornecedor("Códigos não encontrados para a empresa com o ID: " + cdEmpresa);
         } else {
             return codigoDoFornecedorList;
         }
     }
 
 
-//    public void updateCodigo(String cnpj, FornecedorDTO data) {
-//        try {
-//            Optional<Fornecedor> optionalFornecedor = fornecedorRepository.findBycnpj(cnpj);
-//            if (optionalFornecedor.isPresent()) {
-//                Fornecedor fornecedor = optionalFornecedor.get();
-//                fornecedor.update(data);
-//                fornecedorRepository.save(fornecedor);
-//            } else {
-//                throw new EntityNotExistException(cnpj);
-//            }
-//        } catch (EntityNotExistException ex) {
-//            String mensagem = ex.getMessage();
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, mensagem);
-//        }
-//    }
-//
-    public void deleteCodigoFornecedor(String cdfornecedor) throws EntityNotExistException{
+    public void updateCodigoFornecedor(String cdFornecedor, CodigoFornecedorDTO data) {
+        try {
+            Optional<CodigoDoFornecedor> optionalCodigoDoFornecedor = codigoFornecedorRepository.findBycdfornecedor(cdFornecedor);
+            if (optionalCodigoDoFornecedor.isPresent()) {
+                CodigoDoFornecedor codigoDoFornecedor = optionalCodigoDoFornecedor.get();
+                codigoDoFornecedor.update(data);
+                codigoFornecedorRepository.save(codigoDoFornecedor);
+            } else {
+                throw new EntityNotExistExceptionCdFornecedor(cdFornecedor);
+            }
+        } catch (EntityNotExistExceptionCdFornecedor ex) {
+            String mensagem = ex.getMessage();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, mensagem);
+        }
+    }
+
+    public void deleteCodigoFornecedor(String cdfornecedor) throws EntityNotExistExceptionCdFornecedor{
         Optional<CodigoDoFornecedor> optionalCodigoDoFornecedor = codigoFornecedorRepository.findBycdfornecedor(cdfornecedor);
         if(optionalCodigoDoFornecedor.isPresent()){
             CodigoDoFornecedor codigoDoFornecedor = optionalCodigoDoFornecedor.get();
             codigoFornecedorRepository.delete(codigoDoFornecedor);
         }else{
-            throw new EntityNotExistException(cdfornecedor);
+            throw new EntityNotExistExceptionCdFornecedor(cdfornecedor);
         }
     }
 

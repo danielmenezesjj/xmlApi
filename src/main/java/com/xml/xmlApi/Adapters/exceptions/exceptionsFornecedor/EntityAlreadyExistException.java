@@ -1,4 +1,4 @@
-package com.xml.xmlApi.Adapters.exceptions;
+package com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor;
 
 
 import org.springframework.http.HttpStatus;

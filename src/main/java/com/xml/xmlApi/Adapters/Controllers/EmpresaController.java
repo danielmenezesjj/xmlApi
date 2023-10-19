@@ -2,12 +2,16 @@ package com.xml.xmlApi.Adapters.Controllers;
 
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.xml.xmlApi.Adapters.Dtos.EmpresaDTO;
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
+import com.xml.xmlApi.core.businessRule.EmpresaBusiness;
+import com.xml.xmlApi.core.businessRule.EmpresaEnderecoBusiness;
 import com.xml.xmlApi.core.businessRule.FornecedorBusiness;
 import com.xml.xmlApi.core.businessRule.FornecedorEnderecoBusiness;
+import com.xml.xmlApi.core.domain.Empresa.Empresa;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,22 +25,21 @@ import java.io.IOException;
 import java.util.Map;
 
 
-
 @RestController
-@RequestMapping("/fornecedor")
-public class FornecedorController {
+@RequestMapping("/empresa")
+public class EmpresaController {
+
 
     @Autowired
-    private FornecedorRepository fornecedorRepository;
-    @Autowired
-    private FornecedorBusiness fornecedorBusiness;
+    private EmpresaBusiness empresaBusiness;
 
     @Autowired
-    private FornecedorEnderecoBusiness fornecedorEnderecoBusiness;
+    private EmpresaEnderecoBusiness empresaEnderecoBusiness;
 
 
     @PostMapping("/xml")
-    public ResponseEntity<Map<String, Object>> postFornecedorXML(@RequestParam("file") MultipartFile file) {
+    @Transactional
+    public ResponseEntity<Map<String, Object>> postEmpresaXML(@RequestParam("file") MultipartFile file) {
         try {
             XmlMapper xmlMapper = new XmlMapper();
             Map<String, Object> xmlMap = xmlMapper.readValue(file.getInputStream(), Map.class);
@@ -48,7 +51,7 @@ public class FornecedorController {
                 ide = (Map<String, Object>) ide.get("emit");
 
 
-                fornecedorBusiness.postFornecedorXML(ide);
+                empresaBusiness.postEmpresaXML(ide);
 
                 return new ResponseEntity<>(ide, HttpStatus.OK);
             }
@@ -60,34 +63,34 @@ public class FornecedorController {
     }
 
     @PostMapping
-    public ResponseEntity postFornecedor (@RequestBody FornecedorDTO data) throws EntityAlreadyExistException {
-            Fornecedor fornecedor = new Fornecedor(data);
-            fornecedor.setEnderFornecedor(data.enderFornecedor());
-            fornecedorBusiness.postFornecedor(fornecedor);
-            return ResponseEntity.status(HttpStatus.CREATED).body(fornecedor);
+    public ResponseEntity postEmpresa(@RequestBody EmpresaDTO data) throws EntityAlreadyExistException {
+            Empresa empresa = new Empresa(data);
+            empresa.setEnderEmpresa(data.enderEmpresa());
+            empresaBusiness.postEmpresa(empresa);
+            return ResponseEntity.status(HttpStatus.CREATED).body(empresa);
         }
 
 
     @GetMapping
-    public ResponseEntity getFornecedor(Pageable pageable){
-        return ResponseEntity.ok(fornecedorBusiness.getAll(pageable));
+    public ResponseEntity getEmpresa(Pageable pageable){
+        return ResponseEntity.ok(empresaBusiness.getAll(pageable));
     }
 
     @GetMapping("/{cnpj}")
-    public ResponseEntity getOneFornecedor(@PathVariable String cnpj) throws EntityNotExistException {
-        return ResponseEntity.ok(fornecedorBusiness.getOne(cnpj));
+    public ResponseEntity getOneEmpresa(@PathVariable String cnpj) throws EntityNotExistException {
+        return ResponseEntity.ok(empresaBusiness.getOne(cnpj));
     }
 
 
     @PutMapping("/{cnpj}")
     @Transactional
-    public ResponseEntity putFornecedor(@PathVariable String cnpj, @RequestBody FornecedorDTO data) throws EntityNotExistException{
-        fornecedorBusiness.updateFornecedor(cnpj, data);
+    public ResponseEntity putEmpresa(@PathVariable String cnpj, @RequestBody EmpresaDTO data) throws EntityNotExistException{
+        empresaBusiness.updateEmpresa(cnpj, data);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/{cnpj}")
-    public ResponseEntity deleteFornecedor(@PathVariable String cnpj) throws EntityNotExistException {
-        fornecedorBusiness.deleteFornecedor(cnpj);
+    public ResponseEntity deleteEmpresa(@PathVariable String cnpj) throws EntityNotExistException {
+        empresaBusiness.deleteEmpresa(cnpj);
         return ResponseEntity.noContent().build();
 
     }

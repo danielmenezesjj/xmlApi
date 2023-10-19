@@ -1,8 +1,8 @@
 package com.xml.xmlApi.core.businessRule;
 
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
-import com.xml.xmlApi.Adapters.exceptions.EntityAlreadyExistException;
-import com.xml.xmlApi.Adapters.exceptions.EntityNotExistException;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
 import com.xml.xmlApi.core.domain.Fornecedor.EnderFornecedor;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
