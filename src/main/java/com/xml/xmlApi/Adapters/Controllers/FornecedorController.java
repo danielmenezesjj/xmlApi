@@ -3,12 +3,11 @@ package com.xml.xmlApi.Adapters.Controllers;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
-import com.xml.xmlApi.Adapters.exceptions.EntityAlreadyExistException;
-import com.xml.xmlApi.Adapters.exceptions.EntityNotExistException;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
 import com.xml.xmlApi.core.businessRule.FornecedorBusiness;
 import com.xml.xmlApi.core.businessRule.FornecedorEnderecoBusiness;
-import com.xml.xmlApi.core.domain.Fornecedor.EnderFornecedor;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

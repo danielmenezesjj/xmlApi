@@ -24,10 +24,9 @@ public class CodigoDoFornecedor {
         private String cdfornecedor;
         private String materialfornecedor;
 
+
         @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-
         @JsonManagedReference
-
         @JoinColumn(name = "fornecedor_id")
         private Fornecedor fornecedor;
 
@@ -35,5 +34,15 @@ public class CodigoDoFornecedor {
                 this.cdfornecedor = data.cdfornecedor();
                 this.materialfornecedor = data.materialfornecedor();
 
+        }
+
+        public void update(CodigoFornecedorDTO data) {
+
+                if(data.cdfornecedor() != null){
+                        this.cdfornecedor = data.cdfornecedor();
+                }
+                if(data.materialfornecedor() != null){
+                        this.materialfornecedor = data.materialfornecedor();
+                }
         }
 }
