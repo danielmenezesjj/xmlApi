@@ -45,7 +45,7 @@ public class EmpresaController {
             Map<String, Object> xmlMap = xmlMapper.readValue(file.getInputStream(), Map.class);
 
             Map<String, Object> ide = (Map<String, Object>) xmlMap.get("NFe");
-
+//a
             if (ide != null) {
                 ide = (Map<String, Object>) ide.get("infNFe");
                 ide = (Map<String, Object>) ide.get("emit");
