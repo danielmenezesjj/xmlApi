@@ -1,15 +1,17 @@
 package com.xml.xmlApi.core.domain.Produto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xml.xmlApi.Adapters.Dtos.ProdutoDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.xml.xmlApi.core.domain.CodigoFornecedor.CodigoDoFornecedor;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +28,11 @@ public class Produto {
     private String descricao;
     private Float vlunitario;
     private String unidadeMedida;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "produto_codigo_fornecedor", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "codigo_fornecedor_id"))
+    private Set<CodigoDoFornecedor> codigosFornecedores = new HashSet<>();
 
     public Produto(ProdutoDTO data) {
 

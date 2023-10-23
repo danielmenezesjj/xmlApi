@@ -5,11 +5,15 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.xml.xmlApi.Adapters.Dtos.CodigoFornecedorDTO;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
+import com.xml.xmlApi.core.domain.Produto.Produto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,6 +28,8 @@ public class CodigoDoFornecedor {
         private String cdfornecedor;
         private String materialfornecedor;
 
+        @ManyToMany(mappedBy = "codigosFornecedores")
+        private Set<Produto> produtos = new HashSet<>();
 
         @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
         @JsonManagedReference

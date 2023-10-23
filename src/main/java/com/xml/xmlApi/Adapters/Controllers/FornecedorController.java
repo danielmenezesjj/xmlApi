@@ -36,7 +36,7 @@ public class FornecedorController {
 
 
     @PostMapping("/xml")
-    public ResponseEntity<Map<String, Object>> postFornecedorXML(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> postFornecedorXML(@RequestParam("file") MultipartFile file) throws EntityAlreadyExistException {
         try {
             XmlMapper xmlMapper = new XmlMapper();
             Map<String, Object> xmlMap = xmlMapper.readValue(file.getInputStream(), Map.class);
@@ -47,15 +47,18 @@ public class FornecedorController {
                 ide = (Map<String, Object>) ide.get("infNFe");
                 ide = (Map<String, Object>) ide.get("emit");
 
-
                 fornecedorBusiness.postFornecedorXML(ide);
 
                 return new ResponseEntity<>(ide, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (EntityAlreadyExistException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            // Trate ou registre a exceção de alguma forma, se necessário
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (EntityAlreadyExistException e) {
+            e.printStackTrace(); // Você pode tratar ou registrar a exceção, se necessário
+            throw e; // Lança a exceção personalizada
         }
     }
 

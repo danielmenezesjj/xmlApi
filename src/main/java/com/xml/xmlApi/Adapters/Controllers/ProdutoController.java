@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.Adapters.Dtos.ProdutoDTO;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityAlreadyExistExceptionCdFornecedor;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityNotExistExceptionCdFornecedor;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
@@ -43,29 +44,29 @@ public class ProdutoController {
         }
 
 
-//    @GetMapping
-//    public ResponseEntity getFornecedor(Pageable pageable){
-//        return ResponseEntity.ok(fornecedorBusiness.getAll(pageable));
-//    }
-//
-//    @GetMapping("/{cnpj}")
-//    public ResponseEntity getOneFornecedor(@PathVariable String cnpj) throws EntityNotExistException {
-//        return ResponseEntity.ok(fornecedorBusiness.getOne(cnpj));
-//    }
-//
-//
-//    @PutMapping("/{cnpj}")
-//    @Transactional
-//    public ResponseEntity putFornecedor(@PathVariable String cnpj, @RequestBody FornecedorDTO data) throws EntityNotExistException{
-//        fornecedorBusiness.updateFornecedor(cnpj, data);
-//        return ResponseEntity.ok().build();
-//    }
-//    @DeleteMapping("/{cnpj}")
-//    public ResponseEntity deleteFornecedor(@PathVariable String cnpj) throws EntityNotExistException {
-//        fornecedorBusiness.deleteFornecedor(cnpj);
-//        return ResponseEntity.noContent().build();
-//
-//    }
+    @GetMapping
+    public ResponseEntity getProdutos(Pageable pageable){
+        return ResponseEntity.ok(produtoBusiness.getAll(pageable));
+    }
+
+    @GetMapping("/{cdproduto}")
+    public ResponseEntity getOneProduto(@PathVariable String cdproduto) throws EntityNotExistExceptionCdFornecedor {
+        return ResponseEntity.ok(produtoBusiness.getOne(cdproduto));
+    }
+
+
+    @PutMapping("/{cdproduto}")
+    @Transactional
+    public ResponseEntity putProduto(@PathVariable String cdproduto, @RequestBody ProdutoDTO data) throws EntityNotExistException{
+        produtoBusiness.updateProduto(cdproduto, data);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("/{cdproduto}")
+    public ResponseEntity deleteProduto(@PathVariable String cdproduto) throws  EntityNotExistExceptionCdFornecedor {
+        produtoBusiness.deleteProduto(cdproduto);
+        return ResponseEntity.noContent().build();
+
+    }
 
 
 }
