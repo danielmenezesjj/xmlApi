@@ -28,7 +28,7 @@ public class CodigoDoFornecedor {
         private String cdfornecedor;
         private String materialfornecedor;
 
-        @ManyToMany(mappedBy = "codigosFornecedores")
+        @ManyToMany(mappedBy = "codigosFornecedores", cascade = CascadeType.ALL)
         private Set<Produto> produtos = new HashSet<>();
 
         @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

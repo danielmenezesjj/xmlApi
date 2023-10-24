@@ -23,11 +23,11 @@ public class ProdutoCodigoFornecedor {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "codigo_fornecedor_id")
     private CodigoDoFornecedor codigoFornecedor;
 
