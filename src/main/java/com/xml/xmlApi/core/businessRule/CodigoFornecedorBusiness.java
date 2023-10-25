@@ -7,8 +7,10 @@ import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExis
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.CodigoFornecedorRepository;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
+import com.xml.xmlApi.Infrastructure.Repository.ProdutoCodigoFornecedorRepository;
 import com.xml.xmlApi.core.domain.CodigoFornecedor.CodigoDoFornecedor;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
+import com.xml.xmlApi.core.domain.ProdutoCodigoFornecedor.ProdutoCodigoFornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,8 @@ public class CodigoFornecedorBusiness {
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
+    @Autowired
+    private ProdutoCodigoFornecedorRepository produtoCodigoFornecedorRepository;
 
 
     public CodigoDoFornecedor postCodigoFornecedor(CodigoDoFornecedor codigoDoFornecedor, Integer id) throws EntityAlreadyExistExceptionCdFornecedor {
@@ -80,6 +84,10 @@ public class CodigoFornecedorBusiness {
     }
 
     public void deleteCodigoFornecedor(String cdfornecedor) throws EntityNotExistExceptionCdFornecedor{
+
+        Optional<ProdutoCodigoFornecedor> optionalProdutoCodigoFornecedor = produtoCodigoFornecedorRepository.findByCodigoFornecedor(cdfornecedor);
+        ProdutoCodigoFornecedor produtoCodigoFornecedor = optionalProdutoCodigoFornecedor.get();
+        produtoCodigoFornecedorRepository.delete(produtoCodigoFornecedor);
         Optional<CodigoDoFornecedor> optionalCodigoDoFornecedor = codigoFornecedorRepository.findBycdfornecedor(cdfornecedor);
         if(optionalCodigoDoFornecedor.isPresent()){
             CodigoDoFornecedor codigoDoFornecedor = optionalCodigoDoFornecedor.get();

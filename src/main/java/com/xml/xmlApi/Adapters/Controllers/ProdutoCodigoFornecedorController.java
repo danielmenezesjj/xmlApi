@@ -38,7 +38,7 @@ public class ProdutoCodigoFornecedorController {
     @PostMapping
     public ResponseEntity postCodigoFornecedor(@RequestBody ProdutoCodigoFornecedorDTO data) throws EntityAlreadyExistExceptionCdFornecedor {
         // Obtenha o CodigoDoFornecedor com base nos dados do DTO
-        Optional<CodigoDoFornecedor> codigoDoFornecedorOptional = codigoFornecedorRepository.findById(data.codigoFornecedorId());
+        Optional<CodigoDoFornecedor> codigoDoFornecedorOptional = codigoFornecedorRepository.findBycdfornecedor(data.codigoFornecedorId());
 
         if (codigoDoFornecedorOptional.isPresent()) {
             CodigoDoFornecedor codigoDoFornecedor = codigoDoFornecedorOptional.get();

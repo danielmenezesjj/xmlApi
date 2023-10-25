@@ -23,19 +23,19 @@ public class ProdutoCodigoFornecedor {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name = "codigo_fornecedor_id")
     private CodigoDoFornecedor codigoFornecedor;
 
     public ProdutoCodigoFornecedor(ProdutoCodigoFornecedorDTO data){
         this.produto = new Produto();
-        this.produto.setId(data.produtoId());
+        this.produto.setCdproduto(data.produtoId());
         this.codigoFornecedor = new CodigoDoFornecedor();
-        this.codigoFornecedor.setId(data.codigoFornecedorId());
+        this.codigoFornecedor.setCdfornecedor(data.codigoFornecedorId());
     }
 
 }

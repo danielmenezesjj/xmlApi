@@ -30,7 +30,7 @@ public class Produto {
     private String unidadeMedida;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "produto_codigo_fornecedor", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "codigo_fornecedor_id"))
     private Set<CodigoDoFornecedor> codigosFornecedores = new HashSet<>();
 

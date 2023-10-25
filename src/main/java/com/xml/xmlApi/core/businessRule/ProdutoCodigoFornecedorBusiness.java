@@ -32,9 +32,9 @@ public class ProdutoCodigoFornecedorBusiness {
     private ProdutoRepository produtoRepository;
 
 
-    public CodigoDoFornecedor associarProduto(CodigoDoFornecedor codigoDoFornecedor, Integer idProduto) throws EntityAlreadyExistExceptionCdFornecedor {
+    public CodigoDoFornecedor associarProduto(CodigoDoFornecedor codigoDoFornecedor, String cdproduto) throws EntityAlreadyExistExceptionCdFornecedor {
         // Obtenha o Produto pelo ID
-        Optional<Produto> produtoOptional = produtoRepository.findById(idProduto);
+        Optional<Produto> produtoOptional = produtoRepository.findBycdproduto(cdproduto);
 
         if (produtoOptional.isPresent()) {
             Produto produto = produtoOptional.get();
@@ -51,7 +51,7 @@ public class ProdutoCodigoFornecedorBusiness {
             return codigoDoFornecedor;
         } else {
             // Lida com o caso em que o produto com o ID especificado não foi encontrado
-            throw new EntityNotFoundException("Produto não encontrado com o ID: " + idProduto);
+            throw new EntityNotFoundException("Produto não encontrado com o ID: " + cdproduto);
         }
     }
 

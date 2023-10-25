@@ -1,4 +1,4 @@
 package com.xml.xmlApi.Adapters.Dtos;
 
-public record ProdutoCodigoFornecedorDTO(Integer produtoId, Integer codigoFornecedorId) {
+public record ProdutoCodigoFornecedorDTO(String produtoId, String codigoFornecedorId) {
 }
