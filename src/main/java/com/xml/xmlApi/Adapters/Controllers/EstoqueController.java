@@ -33,8 +33,8 @@ public class EstoqueController {
 
 
 
-    @PostMapping("/entrada/xml")
-    public ResponseEntity<List<Map<String, Object>>> postLoteXML(@RequestParam("file") MultipartFile file) throws EntityAlreadyExistException {
+    @PostMapping("/entrada/lote/xml")
+    public ResponseEntity<List<String>> postLoteXML(@RequestParam("file") MultipartFile file) throws EntityAlreadyExistException {
         try {
             XmlMapper xmlMapper = new XmlMapper();
             Map<String, Object> xmlMap = xmlMapper.readValue(file.getInputStream(), Map.class);
@@ -44,23 +44,21 @@ public class EstoqueController {
                 ide = (Map<String, Object>) ide.get("infNFe");
                 Object detalhes = ide.get("det");
 
-                List<Map<String, Object>> produtosList = new ArrayList<>();
+                List<String> cProdList = new ArrayList<>();
 
                 if (detalhes instanceof List) {
                     List<Map<String, Object>> detalhesList = (List<Map<String, Object>>) detalhes;
                     for (Map<String, Object> detalhe : detalhesList) {
                         Map<String, Object> prod = (Map<String, Object>) detalhe.get("prod");
-                        Map<String, Object> rastro = (Map<String, Object>) prod.get("rastro");
-                        loteBusiness.postloteXML(rastro); // Chama o método para cada rastro
-                        produtosList.add(rastro);
+                        String cProd = (String) prod.get("cProd");
+                        cProdList.add(cProd);
                     }
-                    return new ResponseEntity<>(produtosList, HttpStatus.OK);
+                    return new ResponseEntity<>(cProdList, HttpStatus.OK);
                 } else if (detalhes instanceof Map) {
                     Map<String, Object> prod = (Map<String, Object>) ((Map<String, Object>) detalhes).get("prod");
-                    Map<String, Object> rastro = (Map<String, Object>) prod.get("rastro");
-                    loteBusiness.postloteXML(rastro); // Chama o método para o rastro único
-                    produtosList.add(rastro);
-                    return new ResponseEntity<>(produtosList, HttpStatus.OK);
+                    String cProd = (String) prod.get("cProd");
+                    cProdList.add(cProd);
+                    return new ResponseEntity<>(cProdList, HttpStatus.OK);
                 }
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

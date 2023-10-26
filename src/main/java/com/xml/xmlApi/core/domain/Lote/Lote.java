@@ -19,7 +19,6 @@ public class Lote {
     @Id
     @GeneratedValue
     private Integer id;
-
     private String nLote;
     private String dFab;
     private String dVal;

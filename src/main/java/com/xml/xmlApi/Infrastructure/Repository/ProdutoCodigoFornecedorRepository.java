@@ -13,6 +13,10 @@ public interface ProdutoCodigoFornecedorRepository extends JpaRepository<Produto
     @Query("SELECT pcf FROM ProdutoCodigoFornecedor pcf WHERE pcf.produto.cdproduto = :cdProduto")
     List<ProdutoCodigoFornecedor> findByCdProduto(String cdProduto);
 
+
+    @Query("SELECT pcf FROM ProdutoCodigoFornecedor pcf WHERE pcf.codigoFornecedor.cdfornecedor = :codigoFornecedor")
+    List<ProdutoCodigoFornecedor> findByCodigoFornecedorList(@Param("codigoFornecedor") String codigoFornecedor);
+
     @Query("SELECT pcf FROM ProdutoCodigoFornecedor pcf WHERE pcf.codigoFornecedor.cdfornecedor = :codigoFornecedor")
     Optional<ProdutoCodigoFornecedor> findByCodigoFornecedor(@Param("codigoFornecedor") String codigoFornecedor);
 }

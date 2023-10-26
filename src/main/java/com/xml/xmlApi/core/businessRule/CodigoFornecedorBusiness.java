@@ -66,6 +66,16 @@ public class CodigoFornecedorBusiness {
         }
     }
 
+    public List<ProdutoCodigoFornecedor> getAllCodigosRelacionado(String cdEmpresa) throws EntityNotExistExceptionCdFornecedor {
+        List<ProdutoCodigoFornecedor> codigoDoFornecedorList = produtoCodigoFornecedorRepository.findByCodigoFornecedorList(cdEmpresa);
+        if (codigoDoFornecedorList.isEmpty()) {
+            throw new EntityNotExistExceptionCdFornecedor("Códigos não encontrados para a empresa com o ID: " + cdEmpresa);
+        } else {
+            return codigoDoFornecedorList;
+        }
+    }
+
+
 
     public void updateCodigoFornecedor(String cdFornecedor, CodigoFornecedorDTO data) {
         try {
