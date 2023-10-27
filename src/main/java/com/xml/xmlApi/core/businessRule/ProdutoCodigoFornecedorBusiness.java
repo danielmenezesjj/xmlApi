@@ -59,6 +59,16 @@ public class ProdutoCodigoFornecedorBusiness {
         return produtoCodigoFornecedorRepository.findAll(pageable);
     }
 
+    public List<ProdutoCodigoFornecedor> produtosFornecedorAssociado(String cdProduto) throws EntityNotExistExceptionCdFornecedor {
+        List<ProdutoCodigoFornecedor> produtoCodigoFornecedorList = produtoCodigoFornecedorRepository.findByCdProduto(cdProduto);
+        if(produtoCodigoFornecedorList.isEmpty()){
+            throw new EntityNotExistExceptionCdFornecedor(cdProduto);
+        }else{
+            return produtoCodigoFornecedorList;
+        }
+    }
+
+
     public List<ProdutoCodigoFornecedor> getAllComParametro(String cdProduto) throws EntityNotExistExceptionCdFornecedor {
         List<ProdutoCodigoFornecedor> produtoCodigoFornecedorList = produtoCodigoFornecedorRepository.findByCdProduto(cdProduto);
         if(produtoCodigoFornecedorList.isEmpty()){

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,10 +67,10 @@ public class CodigoFornecedorBusiness {
         }
     }
 
-    public List<ProdutoCodigoFornecedor> getAllCodigosRelacionado(String cdEmpresa) throws EntityNotExistExceptionCdFornecedor {
-        List<ProdutoCodigoFornecedor> codigoDoFornecedorList = produtoCodigoFornecedorRepository.findByCodigoFornecedorList(cdEmpresa);
+    public List<ProdutoCodigoFornecedor> getAllCodigosRelacionado(List codigosFornecedor) throws EntityNotExistExceptionCdFornecedor {
+        List<ProdutoCodigoFornecedor> codigoDoFornecedorList = produtoCodigoFornecedorRepository.findByCodigoFornecedorList(codigosFornecedor);
         if (codigoDoFornecedorList.isEmpty()) {
-            throw new EntityNotExistExceptionCdFornecedor("Códigos não encontrados para a empresa com o ID: " + cdEmpresa);
+            throw new EntityNotExistExceptionCdFornecedor("Códigos não encontrados com o ID: " + codigosFornecedor);
         } else {
             return codigoDoFornecedorList;
         }
