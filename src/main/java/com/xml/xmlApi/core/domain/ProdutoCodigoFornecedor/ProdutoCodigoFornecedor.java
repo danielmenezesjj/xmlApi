@@ -30,12 +30,18 @@ public class ProdutoCodigoFornecedor {
     @ManyToOne
     @JoinColumn(name = "codigo_fornecedor_id")
     private CodigoDoFornecedor codigoFornecedor;
+    private String cdProduto;
+
+    private String cdFornecedor;
+
 
     public ProdutoCodigoFornecedor(ProdutoCodigoFornecedorDTO data){
         this.produto = new Produto();
         this.produto.setCdproduto(data.produtoId());
         this.codigoFornecedor = new CodigoDoFornecedor();
         this.codigoFornecedor.setCdfornecedor(data.codigoFornecedorId());
+        this.cdProduto = data.produtoId();
+        this.cdFornecedor = data.codigoFornecedorId();
     }
 
 }

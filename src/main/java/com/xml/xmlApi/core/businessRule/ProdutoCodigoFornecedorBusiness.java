@@ -32,7 +32,7 @@ public class ProdutoCodigoFornecedorBusiness {
     private ProdutoRepository produtoRepository;
 
 
-    public CodigoDoFornecedor associarProduto(CodigoDoFornecedor codigoDoFornecedor, String cdproduto) throws EntityAlreadyExistExceptionCdFornecedor {
+    public CodigoDoFornecedor associarProduto(CodigoDoFornecedor codigoDoFornecedor, String cdproduto, String cdfornecedor) throws EntityAlreadyExistExceptionCdFornecedor {
         // Obtenha o Produto pelo ID
         Optional<Produto> produtoOptional = produtoRepository.findBycdproduto(cdproduto);
 
@@ -43,6 +43,9 @@ public class ProdutoCodigoFornecedorBusiness {
             ProdutoCodigoFornecedor produtoCodigoFornecedor = new ProdutoCodigoFornecedor();
             produtoCodigoFornecedor.setProduto(produto);
             produtoCodigoFornecedor.setCodigoFornecedor(codigoDoFornecedor);
+            produtoCodigoFornecedor.setCdProduto(cdproduto);
+            produtoCodigoFornecedor.setCdFornecedor(cdfornecedor);
+
 
             // Salve a associação na tabela de junção
             produtoCodigoFornecedorRepository.save(produtoCodigoFornecedor);
@@ -54,6 +57,14 @@ public class ProdutoCodigoFornecedorBusiness {
             throw new EntityNotFoundException("Produto não encontrado com o ID: " + cdproduto);
         }
     }
+
+    public List<ProdutoCodigoFornecedor> compararCodigosFornecedor(List<String> cProdList) {
+        // Consulta os registros na tabela intermediária que correspondem aos códigos de produtos do fornecedor
+        List<ProdutoCodigoFornecedor> codigosFornecedor = produtoCodigoFornecedorRepository.findByCdFornecedorIn(cProdList);
+        return codigosFornecedor;
+    }
+
+
 
     public Page<ProdutoCodigoFornecedor> getAll(Pageable pageable){
         return produtoCodigoFornecedorRepository.findAll(pageable);

@@ -44,7 +44,7 @@ public class ProdutoCodigoFornecedorController {
             CodigoDoFornecedor codigoDoFornecedor = codigoDoFornecedorOptional.get();
 
             // Chame o método associarProduto com o CodigoDoFornecedor e o ID do Produto
-            CodigoDoFornecedor resultado = produtoCodigoFornecedorBusiness.associarProduto(codigoDoFornecedor, data.produtoId());
+            CodigoDoFornecedor resultado = produtoCodigoFornecedorBusiness.associarProduto(codigoDoFornecedor, data.produtoId(), data.codigoFornecedorId());
             return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
         } else {
             // Lida com o caso em que o CodigoDoFornecedor com o ID especificado não foi encontrado

@@ -6,9 +6,7 @@ import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
-import com.xml.xmlApi.core.businessRule.FornecedorBusiness;
-import com.xml.xmlApi.core.businessRule.FornecedorEnderecoBusiness;
-import com.xml.xmlApi.core.businessRule.LoteBusiness;
+import com.xml.xmlApi.core.businessRule.*;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -31,36 +29,32 @@ public class EstoqueController {
     @Autowired
     private LoteBusiness loteBusiness;
 
+    @Autowired
+    private ProdutoCodigoFornecedorBusiness produtoCodigoFornecedorBusiness;
+
+    @Autowired
+    private LeituraXMLBusiness leituraXMLBusiness;
+
+
 
 
     @PostMapping("/entrada/lote/xml")
     public ResponseEntity<List<String>> postLoteXML(@RequestParam("file") MultipartFile file) throws EntityAlreadyExistException {
         try {
-            XmlMapper xmlMapper = new XmlMapper();
-            Map<String, Object> xmlMap = xmlMapper.readValue(file.getInputStream(), Map.class);
+            List<String> cProdList = leituraXMLBusiness.processarXML(file);
 
-            Map<String, Object> ide = (Map<String, Object>) xmlMap.get("NFe");
-            if (ide != null) {
-                ide = (Map<String, Object>) ide.get("infNFe");
-                Object detalhes = ide.get("det");
+            if (!cProdList.isEmpty()) {
+                List<String> codigosAssociados = leituraXMLBusiness.getCodigosAssociados(cProdList);
 
-                List<String> cProdList = new ArrayList<>();
-
-                if (detalhes instanceof List) {
-                    List<Map<String, Object>> detalhesList = (List<Map<String, Object>>) detalhes;
-                    for (Map<String, Object> detalhe : detalhesList) {
-                        Map<String, Object> prod = (Map<String, Object>) detalhe.get("prod");
-                        String cProd = (String) prod.get("cProd");
-                        cProdList.add(cProd);
-                    }
-                    return new ResponseEntity<>(cProdList, HttpStatus.OK);
-                } else if (detalhes instanceof Map) {
-                    Map<String, Object> prod = (Map<String, Object>) ((Map<String, Object>) detalhes).get("prod");
-                    String cProd = (String) prod.get("cProd");
-                    cProdList.add(cProd);
-                    return new ResponseEntity<>(cProdList, HttpStatus.OK);
+                if (!codigosAssociados.isEmpty()) {
+                    // Códigos associados encontrados
+                    return new ResponseEntity<>(codigosAssociados, HttpStatus.OK);
+                } else {
+                    // Nenhum código associado encontrado
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
             }
+
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (IOException e) {
             e.printStackTrace();
