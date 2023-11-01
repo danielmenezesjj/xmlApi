@@ -20,6 +20,7 @@ public class Lote {
     @GeneratedValue
     private Integer id;
     private String nLote;
+    private String  qLote;
     private String dFab;
     private String dVal;
 

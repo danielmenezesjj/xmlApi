@@ -20,16 +20,16 @@ public class Estoque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // Relacionamento com a entidade Empresa
+
     @ManyToOne
     @JoinColumn(name = "empresa_id") // nome da coluna que armazena o ID da empresa no banco de dados
     private Empresa empresa;
+    private String cdProduto;
+    private String dtval;
+    private String dtfab;
+    private String nlote;
+    private String qlote;
 
-    private Float quantidade;
-    // Relacionamento com a entidade Lote
-    @ManyToOne
-    @JoinColumn(name = "lote_id")
-    private Lote lote;
 
 
 }
