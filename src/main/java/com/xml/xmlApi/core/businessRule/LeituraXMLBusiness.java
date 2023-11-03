@@ -91,7 +91,12 @@ public class LeituraXMLBusiness {
                     Lote rastroInfo = new Lote();
                     if (rastro != null) {
                         rastroInfo.setNLote((String) rastro.get("nLote"));
-                        rastroInfo.setQLote((String) rastro.get("qLote"));
+                        try {
+                            rastroInfo.setQLote(Float.parseFloat((String) rastro.get("qLote")));
+                        } catch (NumberFormatException e) {
+                            // Lidar com a exceção, por exemplo, definir um valor padrão
+                            rastroInfo.setQLote(0.0f); // Valor padrão, caso a conversão falhe
+                        }
                         rastroInfo.setDFab((String) rastro.get("dFab"));
                         rastroInfo.setDVal((String) rastro.get("dVal"));
                     }
@@ -111,7 +116,12 @@ public class LeituraXMLBusiness {
                 Lote rastroInfo = new Lote();
                 if (rastro != null) {
                     rastroInfo.setNLote((String) rastro.get("nLote"));
-                    rastroInfo.setQLote((String) rastro.get("qLote"));
+                    try {
+                        rastroInfo.setQLote(Float.parseFloat((String) rastro.get("qLote")));
+                    } catch (NumberFormatException e) {
+                        // Lidar com a exceção, por exemplo, definir um valor padrão
+                        rastroInfo.setQLote(0.0f); // Valor padrão, caso a conversão falhe
+                    }
                     rastroInfo.setDFab((String) rastro.get("dFab"));
                     rastroInfo.setDVal((String) rastro.get("dVal"));
                 }

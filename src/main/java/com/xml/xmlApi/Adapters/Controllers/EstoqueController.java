@@ -65,6 +65,7 @@ public class EstoqueController {
                             estoque.setDtfab(rastroInfo.getDFab());
                             estoque.setDtval(rastroInfo.getDVal());
                             estoque.setNlote(rastroInfo.getNLote());
+                            estoque.setQlote(rastroInfo.getQLote());
 //                            estoque.setQlote(rastroInfo.get);
                         }
 

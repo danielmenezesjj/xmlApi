@@ -25,7 +25,22 @@ public class EstoqueBusiness {
 
 
     public Estoque postProduto(Estoque estoque) throws EntityAlreadyExistExceptionCdFornecedor {
-      return estoqueRepository.save(estoque);
+        // Verifique se já existe um estoque com base em cdProduto, nlote, dfab, dval e empresa_id
+        Estoque existingEstoque = estoqueRepository.findEstoqueByChaveComposta(
+                estoque.getCdProduto(),
+                estoque.getNlote(),
+                estoque.getDtfab(),
+                estoque.getDtval()
+
+        );
+        if (existingEstoque != null) {
+            // O estoque já existe, atualize-o ou realize alguma outra ação necessária
+            existingEstoque.setQlote(existingEstoque.getQlote() + estoque.getQlote()); // Exemplo: Adicionar quantidade ao estoque existente
+            return estoqueRepository.save(existingEstoque);
+        } else {
+            // O estoque não existe, crie um novo
+            return estoqueRepository.save(estoque);
+        }
     }
 
     public Page<Estoque> getAll(Pageable pageable){
