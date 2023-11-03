@@ -30,11 +30,9 @@ import java.util.Map;
 @RequestMapping("/estoque")
 public class EstoqueController {
 
-    @Autowired
-    private LoteBusiness loteBusiness;
 
-    @Autowired
-    private ProdutoCodigoFornecedorBusiness produtoCodigoFornecedorBusiness;
+
+
 
     @Autowired
     private LeituraXMLBusiness leituraXMLBusiness;
@@ -66,7 +64,6 @@ public class EstoqueController {
                             estoque.setDtval(rastroInfo.getDVal());
                             estoque.setNlote(rastroInfo.getNLote());
                             estoque.setQlote(rastroInfo.getQLote());
-//                            estoque.setQlote(rastroInfo.get);
                         }
 
                         // Insira o objeto Estoque na tabela Estoque
