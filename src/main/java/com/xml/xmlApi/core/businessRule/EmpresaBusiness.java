@@ -11,6 +11,7 @@ import com.xml.xmlApi.core.domain.Empresa.EnderEmpresa;
 import com.xml.xmlApi.core.domain.Fornecedor.EnderFornecedor;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,16 @@ public class EmpresaBusiness {
             return optionalEmpresa.get();
         }
     }
+
+    public Empresa getOneById(Integer id) throws EntityNotExistException, ChangeSetPersister.NotFoundException {
+        Optional<Empresa> optionalEmpresa = empresaRepository.findById(id);
+        if(!optionalEmpresa.isPresent()){
+            throw new ChangeSetPersister.NotFoundException();
+        }else{
+            return optionalEmpresa.get();
+        }
+    }
+
 
     public void updateEmpresa(String cnpj, EmpresaDTO data) {
         try {

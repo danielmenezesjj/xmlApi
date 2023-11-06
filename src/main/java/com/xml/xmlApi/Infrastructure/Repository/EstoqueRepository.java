@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface EstoqueRepository extends JpaRepository<Estoque, Integer> {
     @Query("SELECT e FROM estoque e WHERE e.cdProduto = :cdProduto " +
             "AND e.nlote = :nlote " +
@@ -16,4 +18,9 @@ public interface EstoqueRepository extends JpaRepository<Estoque, Integer> {
             @Param("dfab") String dFab,
             @Param("dval") String dVal
     );
+
+
+
+    @Query("SELECT e FROM estoque e WHERE e.empresa.id = :empresaId")
+    List<Estoque> findAllByEmpresaId(@Param("empresaId") Integer empresaId);
 }
