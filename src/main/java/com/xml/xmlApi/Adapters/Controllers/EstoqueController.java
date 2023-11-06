@@ -3,6 +3,7 @@ package com.xml.xmlApi.Adapters.Controllers;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
+import com.xml.xmlApi.Adapters.exceptions.ExceptionNotRastro.TraceDoesNotExist;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityAlreadyExistExceptionCdFornecedor;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
@@ -44,7 +45,7 @@ public class EstoqueController {
 
 
     @PostMapping("/entrada/lote/xml")
-    public ResponseEntity<Map<String, List<Map<String, Object>>>> postLoteXML(@RequestParam("file") MultipartFile file) throws EntityAlreadyExistException {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> postLoteXML(@RequestParam("file") MultipartFile file) throws TraceDoesNotExist {
         try {
             List<Map<String, Object>> produtosList = leituraXMLBusiness.processarXML(file);
 

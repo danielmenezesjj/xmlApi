@@ -2,8 +2,10 @@ package com.xml.xmlApi.core.businessRule;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.xml.xmlApi.Adapters.Dtos.CodigoFornecedorDTO;
+import com.xml.xmlApi.Adapters.exceptions.ExceptionNotRastro.TraceDoesNotExist;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityAlreadyExistExceptionCdFornecedor;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsCodigoFornecedor.EntityNotExistExceptionCdFornecedor;
+import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
 import com.xml.xmlApi.Infrastructure.Repository.CodigoFornecedorRepository;
 import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
 import com.xml.xmlApi.Infrastructure.Repository.ProdutoCodigoFornecedorRepository;
@@ -70,7 +72,7 @@ public class LeituraXMLBusiness {
 
 
 
-    public List<Map<String, Object>> processarXML(MultipartFile file) throws IOException {
+    public List<Map<String, Object>> processarXML(MultipartFile file) throws IOException, TraceDoesNotExist {
         XmlMapper xmlMapper = new XmlMapper();
         Map<String, Object> xmlMap = xmlMapper.readValue(file.getInputStream(), Map.class);
 
@@ -89,32 +91,10 @@ public class LeituraXMLBusiness {
 
                     Map<String, Object> rastro = (Map<String, Object>) prod.get("rastro");
                     Lote rastroInfo = new Lote();
-                    if (rastro != null) {
-                        rastroInfo.setNLote((String) rastro.get("nLote"));
-                        try {
-                            rastroInfo.setQLote(Float.parseFloat((String) rastro.get("qLote")));
-                        } catch (NumberFormatException e) {
-                            // Lidar com a exceção, por exemplo, definir um valor padrão
-                            rastroInfo.setQLote(0.0f); // Valor padrão, caso a conversão falhe
-                        }
-                        rastroInfo.setDFab((String) rastro.get("dFab"));
-                        rastroInfo.setDVal((String) rastro.get("dVal"));
+                    if (rastro == null) {
+                        throw new TraceDoesNotExist();
                     }
 
-                    Map<String, Object> produtoInfo = new HashMap<>();
-                    produtoInfo.put("cProd", cProd);
-                    produtoInfo.put("rastroInfo", rastroInfo);
-
-                    produtosList.add(produtoInfo);
-
-                }
-            } else if (detalhes instanceof Map) {
-                Map<String, Object> prod = (Map<String, Object>) ((Map<String, Object>) detalhes).get("prod");
-                String cProd = (String) prod.get("cProd");
-
-                Map<String, Object> rastro = (Map<String, Object>) prod.get("rastro");
-                Lote rastroInfo = new Lote();
-                if (rastro != null) {
                     rastroInfo.setNLote((String) rastro.get("nLote"));
                     try {
                         rastroInfo.setQLote(Float.parseFloat((String) rastro.get("qLote")));
@@ -124,7 +104,33 @@ public class LeituraXMLBusiness {
                     }
                     rastroInfo.setDFab((String) rastro.get("dFab"));
                     rastroInfo.setDVal((String) rastro.get("dVal"));
+
+                    Map<String, Object> produtoInfo = new HashMap<>();
+                    produtoInfo.put("cProd", cProd);
+                    produtoInfo.put("rastroInfo", rastroInfo);
+
+                    produtosList.add(produtoInfo);
                 }
+            } else if (detalhes instanceof Map) {
+                Map<String, Object> prod = (Map<String, Object>) ((Map<String, Object>) detalhes).get("prod");
+                String cProd = (String) prod.get("cProd");
+
+                Map<String, Object> rastro = (Map<String, Object>) prod.get("rastro");
+                Lote rastroInfo = new Lote();
+
+                if (rastro == null) {
+                    throw new IllegalArgumentException("Tag 'rastro' não encontrada no XML.");
+                }
+
+                rastroInfo.setNLote((String) rastro.get("nLote"));
+                try {
+                    rastroInfo.setQLote(Float.parseFloat((String) rastro.get("qLote")));
+                } catch (NumberFormatException e) {
+                    // Lidar com a exceção, por exemplo, definir um valor padrão
+                    rastroInfo.setQLote(0.0f); // Valor padrão, caso a conversão falhe
+                }
+                rastroInfo.setDFab((String) rastro.get("dFab"));
+                rastroInfo.setDVal((String) rastro.get("dVal"));
 
                 Map<String, Object> produtoInfo = new HashMap<>();
                 produtoInfo.put("cProd", cProd);
