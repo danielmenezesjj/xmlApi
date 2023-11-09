@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.xml.xmlApi.Adapters.Dtos.EmpresaDTO;
 import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.core.domain.CodigoFornecedor.CodigoDoFornecedor;
+import com.xml.xmlApi.core.domain.Documento.Documento;
 import com.xml.xmlApi.core.domain.Fornecedor.EnderFornecedor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -26,6 +28,8 @@ public class Empresa {
     @Column(name = "id_empresa")
     private Integer id;
 
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
+    private List<Documento> documentos = new ArrayList<>();
     private String cdEmpresa;
     private String cnpj;
     private String xNome;

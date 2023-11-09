@@ -33,6 +33,12 @@ public class DocumentoController {
     private DocumentoBusiness documentoBusiness;
 
 
+    @GetMapping
+    public ResponseEntity getDocumento(Pageable pageable){
+        var alldocumentos = documentoBusiness.getAll(pageable);
+        return ResponseEntity.ok(alldocumentos);
+    }
+
 
     @PostMapping
     public ResponseEntity postFornecedor (@RequestBody DocumentoDTO data) throws EntityAlreadyExistExceptionCdFornecedor, EntityAlreadyExistException {
@@ -42,27 +48,40 @@ public class DocumentoController {
         }
 
     @PostMapping("/xml")
-    public ResponseEntity<Map<String, Object>> postDocumentoXML(@RequestParam("file") MultipartFile file) throws EntityAlreadyExistException {
+    public ResponseEntity<Map<String, Object>> postDocumentoXML(@RequestParam("file") MultipartFile file, @RequestParam("usuario") String usuario, @RequestParam("empresa_id") Integer empresa_id) throws EntityAlreadyExistException {
         try {
             XmlMapper xmlMapper = new XmlMapper();
             Map<String, Object> xmlMap = xmlMapper.readValue(file.getInputStream(), Map.class);
 
             Map<String, Object> ide = (Map<String, Object>) xmlMap.get("NFe");
             Map<String, Object> chvAcesso = (Map<String, Object>) xmlMap.get("protNFe");
+            Map<String, Object> fornecedor = (Map<String, Object>) xmlMap.get("NFe");
 
             if (ide != null && chvAcesso != null) {
                 ide = (Map<String, Object>) ide.get("infNFe");
                 ide = (Map<String, Object>) ide.get("ide");
                 chvAcesso = (Map<String, Object>) chvAcesso.get("infProt");
 
-                // Crie um novo mapa para combinar as informações de ide e chvAcesso
-                Map<String, Object> combinedData = new HashMap<>();
-                combinedData.putAll(ide);
-                combinedData.putAll(chvAcesso);
+                fornecedor = (Map<String, Object>) fornecedor.get("infNFe");
+                fornecedor = (Map<String, Object>) fornecedor.get("emit");
 
-                documentoBusiness.postDocumentoXML(combinedData);
 
-                return new ResponseEntity<>(combinedData, HttpStatus.OK);
+
+                // Adicione a informação da tag <emit>
+                // Crie um novo mapa para combinar as informações de ide, chvAcesso e emit
+                Map<String, Object> selectedData = new HashMap<>();
+                selectedData.put("fornecedor", fornecedor.get("xNome"));
+                selectedData.put("nrdocumento", ide.get("nNF"));
+                selectedData.put("nmoperacao", ide.get("natOp"));
+                selectedData.put("dtemissao", ide.get("dhEmi"));
+                selectedData.put("chaveacesso", chvAcesso.get("chNFe"));
+                selectedData.put("usuario", usuario);
+                selectedData.put("empresa_id", empresa_id);
+
+
+                documentoBusiness.postDocumentoXML(selectedData);
+
+                return new ResponseEntity<>(selectedData, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (IOException e) {

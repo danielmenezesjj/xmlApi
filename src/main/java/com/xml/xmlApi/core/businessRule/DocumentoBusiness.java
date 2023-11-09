@@ -1,20 +1,18 @@
 package com.xml.xmlApi.core.businessRule;
 
-import com.xml.xmlApi.Adapters.Dtos.FornecedorDTO;
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
-import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityNotExistException;
 import com.xml.xmlApi.Infrastructure.Repository.DocumentoRepository;
-import com.xml.xmlApi.Infrastructure.Repository.FornecedorRepository;
 import com.xml.xmlApi.core.domain.Documento.Documento;
-import com.xml.xmlApi.core.domain.Fornecedor.EnderFornecedor;
+import com.xml.xmlApi.core.domain.Empresa.Empresa;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,23 +32,44 @@ public class DocumentoBusiness {
         }
     }
 
-    public void postDocumentoXML(Map<String, Object> ide) throws EntityAlreadyExistException {
+    public Page<Documento> getAll(Pageable pageable){
+        return documentoRepository.findAll(pageable);
+    }
 
+
+    public Exception postDocumentoXML(Map<String, Object> ide) throws EntityAlreadyExistException {
         // Convert Map to Fornecedor
         Documento documento = convertMapToDocumento(ide);
         Optional<Documento> optionalDocumento = documentoRepository.findBychaveacesso(documento.getChaveacesso());
+        if(!optionalDocumento.isPresent()){
+            documentoRepository.save(documento);
+        }else{
+            return new Exception();
+        }
 
+        return null;
     }
 
-
+    public Date createAtautomatico(){
+        Date createdDate = new Date();
+        return createdDate;
+    }
 
     public Documento convertMapToDocumento(Map<String, Object> ide) {
         Documento documento = new Documento();
-        documento.setFornecedor((String) ide.get("CNPJ"));
-        documento.setChaveacesso((String) ide.get("xNome"));
+        documento.setFornecedor((String) ide.get("fornecedor"));
+        documento.setChaveacesso((String) ide.get("chaveacesso"));
+        documento.setNmoperacao((String) ide.get("nmoperacao"));
+        documento.setNrdocumento((String) ide.get("nrdocumento"));
+        documento.setDtemissao((String) ide.get("dtemissao"));
+        documento.setCreatedDate(createAtautomatico());  // Corrigido para chamar o método createAtautomatico
+        documento.setUsuario((String) ide.get("usuario"));
+        documento.setEmpresa((Empresa) ide.get("empresa_id"));
+
 
         return documento;
     }
+
 
 
 

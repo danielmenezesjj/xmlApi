@@ -2,18 +2,14 @@ package com.xml.xmlApi.core.domain.Documento;
 
 
 import com.xml.xmlApi.Adapters.Dtos.DocumentoDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.xml.xmlApi.core.domain.Empresa.Empresa;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -28,7 +24,11 @@ public class Documento {
     @GeneratedValue
     @Column(name = "documento_id")
     private Integer id;
-    private Integer nrdocumento;
+
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+    private String nrdocumento;
     private String fornecedor;
     @Column(name = "DtEmissao")
     private String dtemissao;
