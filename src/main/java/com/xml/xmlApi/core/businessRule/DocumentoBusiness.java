@@ -2,6 +2,7 @@ package com.xml.xmlApi.core.businessRule;
 
 import com.xml.xmlApi.Adapters.exceptions.exceptionsFornecedor.EntityAlreadyExistException;
 import com.xml.xmlApi.Infrastructure.Repository.DocumentoRepository;
+import com.xml.xmlApi.Infrastructure.Repository.EmpresaRepository;
 import com.xml.xmlApi.core.domain.Documento.Documento;
 import com.xml.xmlApi.core.domain.Empresa.Empresa;
 import com.xml.xmlApi.core.domain.Fornecedor.Fornecedor;
@@ -22,6 +23,9 @@ public class DocumentoBusiness {
 
     @Autowired
     private DocumentoRepository documentoRepository;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     public Documento postFornecedor(Documento documento) throws EntityAlreadyExistException {
         Optional<Documento> optionalDocumento = documentoRepository.findBychaveacesso(documento.getChaveacesso());
@@ -57,6 +61,9 @@ public class DocumentoBusiness {
 
     public Documento convertMapToDocumento(Map<String, Object> ide) {
         Documento documento = new Documento();
+        Integer empresaId = (Integer) ide.get("empresa_id");
+        Optional<Empresa> empresaOptional = empresaRepository.findById(empresaId);
+        Empresa empresa = empresaOptional.get();
         documento.setFornecedor((String) ide.get("fornecedor"));
         documento.setChaveacesso((String) ide.get("chaveacesso"));
         documento.setNmoperacao((String) ide.get("nmoperacao"));
@@ -64,7 +71,7 @@ public class DocumentoBusiness {
         documento.setDtemissao((String) ide.get("dtemissao"));
         documento.setCreatedDate(createAtautomatico());  // Corrigido para chamar o método createAtautomatico
         documento.setUsuario((String) ide.get("usuario"));
-        documento.setEmpresa((Empresa) ide.get("empresa_id"));
+        documento.setEmpresa(empresa);
 
 
         return documento;

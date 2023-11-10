@@ -1,6 +1,7 @@
 package com.xml.xmlApi.core.domain.Documento;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xml.xmlApi.Adapters.Dtos.DocumentoDTO;
 import com.xml.xmlApi.core.domain.Empresa.Empresa;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Documento {
     @Column(name = "documento_id")
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
